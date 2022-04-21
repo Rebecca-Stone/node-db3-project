@@ -15,38 +15,28 @@ Open `data/schemes.db3` using a graphical tool like SQLite Studio and study the 
 Open `api/schemes/scheme-router.js` and study the specification for each endpoint. You do not need to make any changes to this file.
 
 - `[GET] /api/schemes`
-SELECT * 
-FROM schemes
 - `[GET] /api/schemes/:scheme_id`
-SELECT scheme_id 
-FROM schemes
 - `[GET] /api/schemes/:scheme_id/steps`
-SELECT steps 
-FROM steps 
-LEFT JOIN scheme 
-ON  steps.scheme_id = scheme.scheme_id
 - `[POST] /api/schemes`
-INSERT INTO schemes (scheme_name)
-VALUES ('name')
 - `[POST] /api/schemes/:scheme_id/steps`
 
 ### Middleware Functions
 
 Write middleware functions in `api/schemes/scheme-middleware.js` following the instructions inside that file:
 
-- [ ] `checkSchemeId`
-- [ ] `validateScheme`
-- [ ] `validateStep`
+- [X] `checkSchemeId`
+- [X] `validateScheme`
+- [X] `validateStep`
 
 ### Database Functions
 
 Write db access functions in `api/schemes/scheme-model.js` following the instructions inside that file:
 
-- [ ] `find`
-- [ ] `findById`
-- [ ] `findSteps`
-- [ ] `add`
-- [ ] `addStep`
+- [X] `find`
+- [X] `findById`
+- [X] `findSteps`
+- [X] `add`
+- [X] `addStep`
 
 #### Schemes Schema
 

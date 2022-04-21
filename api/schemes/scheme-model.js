@@ -20,8 +20,8 @@ async function findById(scheme_id) {
       "st.step_id as step_id",
       "st.step_number as step_number",
       "st.instructions as instructions"
-  );
-  
+    );
+
   if (results.length == 0) {
     return null;
   }
@@ -62,27 +62,18 @@ function add(scheme) {
     .insert(scheme)
     .then(([scheme_id]) => {
       return findById(scheme_id);
-      // return db("schemes").where('scheme_id', scheme_id).first();
     });
 }
 
 async function addStep(scheme_id, step) {
-  // EXERCISE E
-  /*
-    1E- This function adds a step to the scheme with the given `scheme_id`
-    and resolves to _all the steps_ belonging to the given `scheme_id`,
-    including the newly created one.
-  */
-  
   return db("steps")
-    .insert({...step, scheme_id})
+    .insert({ ...step, scheme_id })
     .then(() => {
-      // return findSteps(scheme_id);
-      return db('steps as st')
-        .join('schemes as sc', 'sc.scheme_id', 'st.scheme_id')
-        .select('step_id', 'step_number', 'instructions', 'scheme_name')
-        .orderBy('step_number')
-        .where('sc.scheme_id', scheme_id)
+      return db("steps as st")
+        .join("schemes as sc", "sc.scheme_id", "st.scheme_id")
+        .select("step_id", "step_number", "instructions", "scheme_name")
+        .orderBy("step_number")
+        .where("sc.scheme_id", scheme_id);
     });
 }
 
