@@ -30,7 +30,7 @@ const validateScheme = (req, res, next) => {
   if (!scheme_name || typeof scheme_name != 'string') {
     next({ message: "invalid scheme_name", status: 400 })
   } else {
-    req.body.scheme_name = scheme_name.trim()
+    // req.body.scheme_name = scheme_name.trim()
     next();
   }
 }
