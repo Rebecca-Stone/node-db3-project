@@ -9,11 +9,11 @@ const db = require('../../data/db-config');
   }
 */
 async function checkSchemeId(req, res, next) {
-  const schema = await db('schemes').where('id', req.params.id).first()
-  if (schema) {
+  const scheme = await db('schemes').where('scheme_id', req.params.scheme_id).first()
+  if (scheme) {
     next();
   } else {
-    next({ message: `scheme with scheme_id ${req.params.id} not found`, status: 404 })
+    next({ message: `scheme with scheme_id ${req.params.scheme_id} not found`, status: 404 })
   }
 }
 
@@ -26,11 +26,11 @@ async function checkSchemeId(req, res, next) {
   }
 */
 const validateScheme = (req, res, next) => {
-  let { schema_name } = req.body;
-  if (!schema_name || typeof schema_name != 'string') {
+  let { scheme_name } = req.body;
+  if (!scheme_name || typeof scheme_name != 'string') {
     next({ message: "invalid scheme_name", status: 400 })
   } else {
-    req.body.schema_name = schema_name.trim()
+    req.body.scheme_name = scheme_name.trim()
     next();
   }
 }
@@ -45,7 +45,11 @@ const validateScheme = (req, res, next) => {
   }
 */
 const validateStep = (req, res, next) => {
-
+  if (!req.body.scheme_id || !req.body.instructions || !req.body.step_number) {
+    next({ message: "invalid step", status: 400})
+  } else {
+    next();
+  }
 }
 
 module.exports = {

@@ -17,15 +17,24 @@ function find() { // EXERCISE A
     2A- When you have a grasp on the query go ahead and build it in Knex.
     Return from this function the resulting dataset.
   */
-  return db('schemes as sc')
-    .leftJoin('steps as st', 'sc.scheme_id', 'st.scheme_id')
-    .groupBy('sc.scheme_id')
-    .orderBy('sc.scheme_id')
-    .select('sc.*')
-    .count('st.step_id as number_of_steps')
+  return db('schemes')
+    .leftJoin('steps', 'schemes.scheme_id', 'steps.scheme_id')
+    .groupBy('schemes.scheme_id')
+    .orderBy('schemes.scheme_id')
+    .select('schemes.*')
+    .count('steps.step_id as number_of_steps')
 }
 
-function findById(scheme_id) { // EXERCISE B
+async function findById(scheme_id) { // EXERCISE B
+  let results = await db('schemes')
+    .leftJoin('steps', 'schemes.scheme_id', 'steps.scheme_id')
+    .orderBy('steps.step_number')
+    .select('scheme_name', 'steps.*')
+    .where(`schemes.scheme_id = ${scheme_id}`)
+  
+  if (results.length == 0) {
+    return null;
+  }
   /*
     1B- Study the SQL query below running it in SQLite Studio against `data/schemes.db3`:
 
@@ -91,6 +100,22 @@ function findById(scheme_id) { // EXERCISE B
         "steps": []
       }
   */
+  const scheme = {
+    scheme_id: results[0].scheme_id,
+    scheme_name: results[0].scheme_name,
+    steps: []
+  };
+
+  for (let result of results) {
+    if (result.contents != null) {
+      scheme.steps.push({
+        step_id: result.step_id,
+        step_number: result.step_number,
+        instructions: result.instructions
+      })
+    }
+  }
+  return scheme
 }
 
 function findSteps(scheme_id) { // EXERCISE C
@@ -120,6 +145,11 @@ function add(scheme) { // EXERCISE D
   /*
     1D- This function creates a new scheme and resolves to _the newly created scheme_.
   */
+  return db('schemes')
+    .insert(scheme)
+    .then(([id]) => {
+      return findById(id)
+    })
 }
 
 function addStep(scheme_id, step) { // EXERCISE E
